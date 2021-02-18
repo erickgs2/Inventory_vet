@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "vet-inventory": {
+      "hosting": {
+        "black-dashboard-angular": [
+          "vet-inventory"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "vet-inventory"
+  }
+}
