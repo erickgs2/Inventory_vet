@@ -1,11 +1,15 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
-import { map } from 'rxjs/operators';
+import { isEmpty, map } from 'rxjs/operators';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 //========================================================
 import { SuppliersService } from '../../services/suppliers.service';
-import { Product, Supplier } from '../../objects/supplier';
+import { ProductsService } from '../../services/product.service';
+import { Product } from '../../objects/product';
+import { Supplier } from '../../objects/supplier';
+import { empty } from 'rxjs';
+import { UseExistingWebDriver } from 'protractor/built/driverProviders';
 
 
 @Component({
@@ -17,25 +21,60 @@ import { Product, Supplier } from '../../objects/supplier';
 
 export class CreateSupplierComponent implements OnInit {
 
-  newSupplier: Supplier = new Supplier();
+  suppliers: Supplier[];
+  suppliersReady: boolean = false;
+  products: any[];
+  productsReady: boolean = false;
+
+  _paramSuppCode = null
+  _paramReason = null;
+  _paramIndex = null;
+  _paramProdCode = null;
+  suppName = null;
+
   newProd: Product = new Product();
+
+
+
+
+  newSupplier: Supplier = new Supplier();
   editSupplier: Supplier = new Supplier();
   editProd: Product = new Product();
-  suppCode = null
-  reason = null;
-  suppName = null;
+
+
   tempSuppliers = null;
-  editProdIndex = null;
+
 
   constructor(
     private suppliersService: SuppliersService,
+    private productsService: ProductsService,
     private toastr: ToastrService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router) {
+    this.route.queryParams
+      .subscribe(params => {
+        this._paramIndex = params['index']
+        this._paramSuppCode = params['supp']
+        this._paramProdCode = params['prod']
+        this._paramReason = params['type'];
+
+        this.defineAction();
+      });
+  }
 
 
   ngOnInit(): void {
-    
+    this.productsService.getProductsList().snapshotChanges().pipe(
+      map(changes =>
+        changes.map(c =>
+          ({ key: c.payload.key, ...c.payload.val() })
+        )
+      )
+    ).subscribe(products => {
+      this.products = products;
+      this.productsReady = true;
+      this.defineAction()
+    });
     this.suppliersService.getCustomersList().snapshotChanges().pipe(
       map(changes =>
         changes.map(c =>
@@ -43,33 +82,17 @@ export class CreateSupplierComponent implements OnInit {
         )
       )
     ).subscribe(suppliers => {
-      this.tempSuppliers  = suppliers
-      this.route.queryParams
-      .subscribe(params => {
-        this.editProdIndex = params['index']
-        this.suppCode = params['supp']
-        this.suppName = params['suppName'];
+      this.suppliers = suppliers;
+      this.suppliersReady = true
+      this.defineAction()
+    });
+  }
 
 
-        if (params['supp'] && params['type']!='prodNew') {
-          this.reason = params['type']=='prodEdit' ? 'prodEdit' :"edit";
-          if(params['type']=='prodEdit'){
-            var temp = this.tempSuppliers.filter(k => k.key == this.suppCode)[0];
-            this.editProd = temp.products[params['index']]
-          }
-          var temp = this.tempSuppliers.filter(i => i.key == params['supp']);
-          this.editSupplier = temp[0]
-        } else if (params['type']=='prodNew'){
-          this.reason = "prodNew"
-          
-          this.editProd = {
-            prod_code:'',
-            prod_name:'',
-            prod_brand:'',
-            prod_price:''
-          }
-        }else{
-          this.reason = "new"
+  defineAction() {
+    if (this.suppliersReady && this.productsReady)
+      switch (this._paramReason) {
+        case "suppNew":
           this.editSupplier = {
             key: '',
             name: '',
@@ -81,53 +104,142 @@ export class CreateSupplierComponent implements OnInit {
             phone: '',
             products: []
           }
-        }
+          break;
+        case "suppEdit":
+          var temp = this.suppliers.filter(i => i.key == this._paramSuppCode);
+          this.editSupplier = temp[0]
+          break;
+        case "prodNew":
+          var tempSUpp1 = this.suppliers.filter(k => k.key == this._paramSuppCode)[0];
+          this.suppName = tempSUpp1.name
+          this.newProd = {
+            prod_code: '',
+            prod_name: '',
+            prod_brand: '',
+            prod_price: '',
+            prod_supp: '',
+            prod_quantity: 0
+          }
+          break;
+        case "prodEdit":
+          var tempSUpp = this.suppliers.filter(k => k.key == this._paramSuppCode)[0];
+          var tempProd = this.products.filter(k => k.key == this._paramProdCode)[0];
+          this.suppName = tempSUpp.name
+          this.editProd = tempProd;
+          break;
+      }
 
-      });
-    });
-
-   
-  }
-
-  newCustomer(): void {
-    this.newSupplier = new Supplier();
-  }
-
-  save() {
-    this.suppliersService.createCustomer(this.newSupplier);
-    this.newSupplier = new Supplier();
-    this.router.navigate(['/suppliers']);
-  }
-  saveProd() {
-    var temp = this.tempSuppliers.filter(k => k.key == this.suppCode)[0];
-    this.suppliersService.createProd(this.newProd, this.suppCode, temp.products ? temp.products.length: 0 );
-    this.newProd = new Product();
-    this.router.navigate(['/suppliers']);
-  }
-  update() {
-    this.suppliersService.updateCustomer(this.editSupplier);
-    this.editSupplier = new Supplier();
-    this.router.navigate(['/suppliers']);
-  }
-  updateProd() {
-    this.suppliersService.updateProd(this.suppCode, this.editProd, this.editProdIndex);
-    this.editSupplier = new Supplier();
-    this.router.navigate(['/suppliers']);
   }
 
-  onSubmit() {
-    this.save();
-  }
+
+
   onSubmitProd() {
     this.saveProd();
   }
-  onSubmitUpdateProd() {
-    this.updateProd();
+  saveProd() {
+    if (this.validateProd(this.newProd)) {
+      this.newProd.prod_supp = this._paramSuppCode;
+      this.productsService.createProduct(this.newProd);
+      this.newProd = new Product();
+      this.showNotification('top', 'right', 'Producto ingresado correctamente')
+
+      this.goBackProd()
+    }
   }
+
+
   onSubmitUpdate() {
     this.update();
   }
+  update() {
+    if (this.validateSupp(this.editSupplier)) {
+      this.suppliersService.updateCustomer(this.editSupplier);
+      this.editSupplier = new Supplier();
+      this.showNotification('top', 'right', 'Proveedor actualizado correctamente')
 
+      this.goBack()
+    }
+  }
+
+
+  onSubmitUpdateProd() {
+    this.updateProd();
+  }
+  updateProd() {
+    if (this.validateProd(this.editProd)) {
+      console.log(this.editProd.prod_price)
+      this.productsService.updateProduct(this.editProd, this._paramProdCode);
+      this.editProd = new Product();
+      this.showNotification('top', 'right', 'Producto actualizado correctamente')
+      this.goBackProd()
+    } else {
+
+    }
+
+  }
+
+
+  onSubmit() {
+    if (this.validateSupp(this.newSupplier)) {
+      console.log('entra')
+      this.save();
+    }
+  }
+  save() {
+
+    this.suppliersService.createCustomer(this.newSupplier);
+    this.newSupplier = new Supplier();
+    this.showNotification('top', 'right', 'Proveedor ingresado correctamente')
+
+    this.router.navigate(['/suppliers']);
+
+  }
+  goBack() {
+    this.router.navigate(['/suppliers'], { queryParams: { supp: this._paramSuppCode } });
+  }
+  goBackProd() {
+    this.router.navigate(['/products'], { queryParams: { suppCode: this._paramSuppCode, suppName: this.suppName } });
+  }
+  validateSupp(supp): boolean {
+    if (supp.name != undefined) {
+      if (supp.name != '')
+        return true
+      else {
+        this.showError('top', 'right', 'Ingrese un nombre de proveedor')
+        return false
+      }
+    } else {
+      this.showError('top', 'right', 'Ingrese un nombre de proveedor')
+      return false
+    }
+  }
+
+  validateProd(prod: Product): boolean {
+    if (
+      prod.prod_name != '' &&
+      prod.prod_code != '' &&
+      prod.prod_price.length != 0 &&
+      Number.isFinite(parseInt(prod.prod_price))
+    ) {
+      return true;
+    } else {
+      if (prod.prod_name == '') {
+        this.showError('top', 'right', 'Ingrese un nombre de producto')
+      }
+      if (prod.prod_code == '') {
+        this.showError('top', 'right', 'Ingrese un codigo de producto')
+      }
+      if (!Number.isFinite(parseInt(prod.prod_price))) {
+        if (prod.prod_price.length == 0) {
+          this.showError('top', 'right', 'Ingrese un precio de producto')
+        } else {
+          this.showError('top', 'right', 'El precio del producto debe contener solo numeros')
+        }
+      }
+      return false;
+
+    }
+  }
 
   showNotification(from, align, title) {
 
@@ -136,6 +248,17 @@ export class CreateSupplierComponent implements OnInit {
       closeButton: true,
       enableHtml: true,
       toastClass: "alert alert-success alert-with-icon",
+      positionClass: 'toast-' + from + '-' + align
+    });
+  }
+
+  showError(from, align, title) {
+
+    this.toastr.error('<span class="tim-icons icon-alert-circle-exc" [data-notify]="icon"></span> ' + title + '.', '', {
+      disableTimeOut: false,
+      closeButton: true,
+      enableHtml: true,
+      toastClass: "alert alert-error alert-with-icon",
       positionClass: 'toast-' + from + '-' + align
     });
   }

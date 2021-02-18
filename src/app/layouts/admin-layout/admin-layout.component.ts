@@ -6,7 +6,7 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./admin-layout.component.scss"]
 })
 export class AdminLayoutComponent implements OnInit {
-  public sidebarColor: string = "red";
+  public sidebarColor: string = "blue";
 
   constructor() {}
   changeSidebarColor(color){
@@ -31,5 +31,8 @@ export class AdminLayoutComponent implements OnInit {
       body.classList.remove('white-content');
     }
   }
-  ngOnInit() {}
+  ngOnInit() {
+    // this.changeDashboardColor('blue')
+    this.changeSidebarColor('blue')
+  }
 }

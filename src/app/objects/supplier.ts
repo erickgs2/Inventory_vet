@@ -7,11 +7,5 @@ export class Supplier {
     postalCode:string;
     email:string;
     phone:string; 
-    products: Product[];
-  }
-  export class Product {
-    prod_code:string;
-    prod_name:string;
-    prod_brand:string;
-    prod_price:string;
+    products: string[];
   }

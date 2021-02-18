@@ -1,6 +1,6 @@
 <div class=" content">
     <div class=" row">
-      <div [hidden]="curentSupplier.name == '-'" class=" col-md-4 col-lg-4">
+      <!-- <div [hidden]="curentSupplier.name == ''" class=" col-md-4 col-lg-4">
         <div class=" card card-user" >
           <div class=" card-body">
             <p class=" card-text"></p>
@@ -10,7 +10,7 @@
               <div class=" block block-three"></div>
               <div class=" block block-four"></div>
               <a href="javascript:void(0)">
-                <!-- <img alt="..." class=" avatar" src="assets/img/emilyz.jpg" /> -->
+                <img alt="..." class=" avatar" src="assets/img/emilyz.jpg" />
   
                 <h5 class=" title">{{curentSupplier.name}}</h5>
               </a>
@@ -22,8 +22,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class=" col-md-8 col-lg-8">
+      </div> -->
+      <div class=" col-md-12 col-lg-12">
         <div class=" card card-user">
           <div class=" card-header">
             <h6 class=" title d-inline">Proveedores</h6>
@@ -36,13 +36,13 @@
               <table class="table">
                 <tbody>
                   <tr class="suppliersList" *ngFor="let supp of suppliers">
-                    <td (click)='SelectSupplier(supp)'>
-                      <p class=" title">{{supp.name}}</p>
+                    <td style="padding: 0px;" (click)='SelectSupplier(supp)'>
+                      <p class=" title" style="margin-bottom: 0px;">{{supp.name}}</p>
                       <p class=" text-muted">
                         {{supp.address}}, {{supp.city}} {{supp.state}}
                       </p>
                     </td>
-                    <td class=" td-actions text-right">
+                    <td style="padding: 0px;" class=" td-actions text-right">
                       <button class=" btn btn-link" (click)="editSupplier(supp.key)" type="button" placement="left" ngbTooltip="Editar Proveedor"
                         container="body">
                         <i class=" tim-icons icon-pencil"> </i>
@@ -61,12 +61,12 @@
       </div>
 
     </div>
-    <div class=" row">
+    <!-- <div [hidden]="!currentProductList" class=" row">
       <div class=" col-md-12">
         <div class=" card card-user">
           <div class=" card-header">
             <h6 class=" title d-inline">Catalago</h6>
-            <button [hidden]="curentSupplier.name == '-'" (click)="newProduct(curentSupplier.key, curentSupplier.name)" class=" btn btn-link btn-icon" style="float: right; margin-top: -7px;" type="button">
+            <button [hidden]="curentSupplier.name == '-'" (click)="newProduct(curentSupplier.key)" class=" btn btn-link btn-icon" style="float: right; margin-top: -7px;" type="button">
               <i class=" tim-icons icon-simple-add"> </i>
             </button>
           </div>
@@ -75,7 +75,7 @@
               <table class="table">
 
                 <tbody>
-                  <tr class="suppliersList" *ngFor="let prod of curentSupplier.products; let i = index" [attr.data-index]="i">
+                  <tr class="suppliersList" *ngFor="let prod of currentProductList; let i = index" [attr.data-index]="i">
                     <td>
                       <p class=" title">{{prod.prod_code}} - {{prod.prod_name}}</p>
                       <p class=" text-muted">{{prod.prod_brand}}</p>
@@ -84,11 +84,11 @@
                       <p style="margin-top: 15px;" class=" text-muted">${{prod.prod_price}}</p>
                     </td>
                     <td class=" td-actions text-right" style="width: 10%;">
-                      <button class=" btn btn-link" (click)="editProduct(curentSupplier.key, i, curentSupplier.name)"  type="button" placement="left" ngbTooltip="Editar Proveedor"
+                      <button class=" btn btn-link" (click)="editProduct(curentSupplier.key,prod.key )"  type="button" placement="left" ngbTooltip="Editar Proveedor"
                         container="body">
                         <i class=" tim-icons icon-pencil"> </i>
                       </button>
-                      <button class=" btn btn-link" (click)="deleteProd(curentSupplier.key, i)" type="button" placement="left" ngbTooltip="Eliminar Proveedor"
+                      <button class=" btn btn-link" (click)="deleteProd(prod.key,curentSupplier.key)" type="button" placement="left" ngbTooltip="Eliminar Proveedor"
                         container="body">
                         <i class=" tim-icons icon-trash-simple"> </i>
                       </button>
@@ -101,5 +101,5 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>

@@ -1,0 +1,74 @@
+<div class=" content">
+    <div class=" row">
+        <div class=" col-md-12 col-lg-12">
+            <div class=" card card-user">
+                <div class=" card-header">
+                    <button [routerLink]="['/inventory']" class=" btn btn-link btn-icon"
+                        style="float: left; margin-top: -10px;" type="button">
+                        <i class=" tim-icons icon-minimal-left"> </i>
+                    </button>
+                    <h4 class=" title d-inline">Productos de <b 
+                            class="title">{{_paramSuppName}}</b></h4>
+                </div>
+                <div class=" card-body">
+                    <div class=" ">
+                        <input class=" form-control" id="search" (change)="filter()" name="Search" [(ngModel)]="seachInput" placeholder="Buscar..." type="text" value="" />
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td style="padding: 0px;" >
+                                        <p class="title td-actions">Producto</p>
+                                    </td>
+                                    <td>
+                                        <p class="title td-actions text-center">Precio</p>
+                                    </td>
+                                    <td>
+                                        <p class="title td-actions text-center">Existencias</p>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="suppliersList" *ngFor="let prod of currentProducts">
+                                    <td style="width: 80%; padding: 5px;">
+                                        <p class=" text-muted" style="font-size: 11px; margin-bottom: 0px;">{{prod.prod_code}}</p>
+                                        <p class=" title" style="margin-bottom: 0px;">{{prod.prod_name}}</p>
+                                        <p class=" text-muted" style="margin-bottom: 0px;">
+                                            {{prod.prod_brand}}
+                                        </p>
+                                    </td>
+                                    <td style="padding: 0px;" class=" td-actions text-center">
+                                        <p class=" text-muted">
+                                            {{prod.prod_price}}
+                                        </p>
+                                    </td>
+                                    <td style="padding: 0px;" class=" td-actions text-center">
+                                       
+                                       
+                                        <p style="  margin-bottom: -5px;" class=" text-muted">
+                                            {{prod.prod_quantity}}
+                                            <!-- {{prod.prod_quantity == -1 ? 0 : prod.prod_quantity}} -->
+                                        </p>
+                                        <div class="display: block ruby;">
+                                            <button class=" btn btn-link" (click)="remove(prod)" type="button" placement="left" ngbTooltip="Eliminar uno"
+                                            container="body">
+                                            <i class=" tim-icons icon-simple-delete"> </i>
+                                          </button>
+                                   
+                                           
+                                            
+                                            <button class=" btn btn-link" (click)="add(prod)" type="button" placement="left" ngbTooltip="Agregar uno"
+                                            container="body">
+                                            <i class=" tim-icons icon-simple-add"> </i>
+                                          </button>
+                                        </div>
+                                       
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

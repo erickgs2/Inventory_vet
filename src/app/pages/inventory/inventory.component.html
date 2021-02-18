@@ -1,0 +1,45 @@
+<div class=" content">
+    <div class=" row">
+      <div class=" col-md-12 col-lg-12">
+        <div class=" card card-user">
+          <div class=" card-header">
+            <h6 class=" title d-inline">Proveedores</h6>
+          </div>
+          <div class=" card-body">
+            <div class=" ">
+              <input class=" form-control" id="search1" (change)="filter()" name="seachInput" [(ngModel)]="seachInput" placeholder="Buscar..." type="text" value="" />
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td style="padding: 0px;" ><p class="title td-actions">Proveedor</p></td>
+                            <td><p class="title td-actions text-center">Productos</p></td>
+                            <td><p class="title td-actions text-center">Existencias</p></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="suppliersList" *ngFor="let supp of suppliers">
+                        <td style="padding: 0px;" (click)='SelectSupplier(supp.key, supp.name)'>
+                          <p class=" title" style="margin-bottom: 0px;">{{supp.name}}</p>
+                          <p class=" text-muted">
+                            {{supp.address}}, {{supp.city}} {{supp.state}}
+                          </p>
+                        </td>
+                        <td style="padding: 0px;" class=" td-actions text-center">
+                            <p class=" text-muted">
+                                {{suppCounts[supp.key] == undefined ? 0 : suppCounts[supp.key].productCount}}
+                              </p>
+                        </td>
+                        <td style="padding: 0px;" class=" td-actions text-center">
+                            <p class=" text-muted">
+                                {{suppCounts[supp.key] == undefined ? 0 : suppCounts[supp.key].totalCount}}
+                              </p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

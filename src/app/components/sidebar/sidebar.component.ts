@@ -16,19 +16,19 @@ export const ROUTES: RouteInfo[] = [
   //   class: ""
   // },
   {
+    path: "/inventory",
+    title: "Inventario",
+    rtlTitle: "الرموز",
+    icon: "icon-notes",
+    class: ""
+  },
+  {
     path: "/suppliers",
     title: "Proveedores",
     rtlTitle: "الرموز",
     icon: "icon-single-02",
     class: ""
   },
-  // {
-  //   path: "/icons",
-  //   title: "Icons",
-  //   rtlTitle: "الرموز",
-  //   icon: "icon-atom",
-  //   class: ""
-  // },
   // {
   //   path: "/notifications",
   //   title: "Notifications",

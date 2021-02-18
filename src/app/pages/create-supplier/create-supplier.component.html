@@ -1,7 +1,7 @@
 <div class=" content">
     <div class=" row">
       <div class=" col-md-12">
-        <div [hidden]="reason != 'new'" class=" card">
+        <div [hidden]="_paramReason != 'suppNew'" class=" card">
           <div class=" card-header">
             <button [routerLink]="['/suppliers']" class=" btn btn-link btn-icon" style="float: left; margin-top: -10px;" type="button">
               <i class=" tim-icons icon-minimal-left"> </i>
@@ -95,14 +95,14 @@
                 </div>
               </div>
               <div class=" card-footer">
-                <button class=" btn btn-fill btn-danger" (click)="showNotification('top', 'right','Proveedor ingresado correctamente')" type="submit">Guardar</button>
+                <button class=" btn btn-fill btn-danger" type="submit">Guardar</button>
               </div>
             </form>
           </div>
         </div>
-        <div [hidden]="reason != 'edit'" class=" card">
+        <div [hidden]="_paramReason != 'suppEdit'" class=" card">
           <div class=" card-header">
-            <button [routerLink]="['/suppliers']" class=" btn btn-link btn-icon" style="float: left; margin-top: -10px;" type="button">
+            <button (click)="goBack()" class=" btn btn-link btn-icon" style="float: left; margin-top: -10px;" type="button">
               <i class=" tim-icons icon-minimal-left"> </i>
             </button>
             <h5 class=" title">Editar Proveedor</h5>
@@ -194,14 +194,14 @@
                 </div>
               </div>
               <div class=" card-footer">
-                <button class=" btn btn-fill btn-danger" (click)="showNotification('top', 'right','Proveedor ingresado correctamente')" type="submit">Guardar</button>
+                <button class=" btn btn-fill btn-danger"  type="submit">Guardar</button>
               </div>
             </form>
           </div>
         </div>
-        <div [hidden]="reason != 'prodNew'" class=" card">
+        <div [hidden]="_paramReason != 'prodNew'" class=" card">
           <div class=" card-header">
-            <button [routerLink]="['/suppliers']" class=" btn btn-link btn-icon" style="float: left; margin-top: -10px;" type="button">
+            <button (click)="goBack()" class=" btn btn-link btn-icon" style="float: left; margin-top: -10px;" type="button">
               <i class=" tim-icons icon-minimal-left"> </i>
             </button>
             <h5 class=" title">Crear Producto</h5>
@@ -250,9 +250,9 @@
             </form>
           </div>
         </div>
-        <div [hidden]="reason != 'prodEdit'" class=" card">
+        <div [hidden]="_paramReason != 'prodEdit'" class=" card">
           <div class=" card-header">
-            <button [routerLink]="['/suppliers']" class=" btn btn-link btn-icon" style="float: left; margin-top: -10px;" type="button">
+            <button (click)="goBack()" class=" btn btn-link btn-icon" style="float: left; margin-top: -10px;" type="button">
               <i class=" tim-icons icon-minimal-left"> </i>
             </button>
             <h5 class=" title">Editar Producto</h5>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList} from '@angular/fire/database';
-import { Product, Supplier } from '../objects/supplier';
+import { Supplier } from '../objects/supplier';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class SuppliersService {
   createCustomer(customer: Supplier): void {
     this.customersRef.push(customer);
   }
-  createProd(prod: Product, supp: String, index): void {
+  createProd(prod, supp: String, index): void {
     var temp = this.db.list(this.dbPath+'/'+supp+'/products');
     temp.set(index+'',prod);
   }
@@ -25,7 +25,7 @@ export class SuppliersService {
   updateCustomer(supp:Supplier): Promise<void> {
     return this.customersRef.update(supp.key, supp);
   }
-  updateProd(supp,prod: Product, index): Promise<void> {
+  updateProd(supp,prod, index): Promise<void> {
     var temp = this.db.list(this.dbPath+'/'+supp+'/products');
     return temp.set(index+'',prod);
   }

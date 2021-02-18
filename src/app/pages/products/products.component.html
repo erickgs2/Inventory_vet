@@ -1,0 +1,60 @@
+
+<div class=" content">
+    <div class=" row">
+      <div class=" col-md-12">
+        <div class=" card card-user">
+          <div class=" card-header">
+            <button [routerLink]="['/suppliers']" class=" btn btn-link btn-icon" style="float: left; margin-top: -10px;" type="button">
+                <i class=" tim-icons icon-minimal-left"> </i>
+              </button>
+            <h6 class=" title d-inline">Catalago de Productos</h6>
+            <h5 class=" title d-inline">{{_paramSuppName}}</h5>
+            <button (click)="newProduct(_paramSuppCode)" class=" btn btn-link btn-icon" style="float: right; margin-top: -7px;" type="button">
+              <i class=" tim-icons icon-simple-add"> </i>
+            </button>
+          </div>
+          <div class=" card-body">
+            <div class=" ">
+              <table class="table">
+                <thead>
+                    <tr>
+                        <td style="padding: 0px;" >
+                            <p class="title td-actions">Producto</p>
+                        </td>
+                        <td>
+                            <p class="title td-actions text-center">Precio</p>
+                        </td>
+                        <td>
+                            <p class="title td-actions text-center">Opciones</p>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr class="suppliersList" *ngFor="let prod of currentProductList; let i = index" [attr.data-index]="i">
+                    <td style="padding: 0px; width: 85%;">
+                      <p class=" title" style="margin-bottom: 0px;" >{{prod.prod_code}} - {{prod.prod_name}}</p>
+                      <p class=" text-muted">{{prod.prod_brand}}</p>
+                    </td>
+                    <td class="text-center" style="padding: 0px; ">
+                      <p style="margin-top: 15px;" class=" text-center text-muted">${{prod.prod_price}}</p>
+                    </td>
+                    <td class=" td-actions text-center" style=" padding: 0px;">
+                      <button class=" btn btn-link" (click)="editProduct(_paramSuppCode,prod.key )"  type="button" placement="left" ngbTooltip="Editar Proveedor"
+                        container="body">
+                        <i class=" tim-icons icon-pencil"> </i>
+                      </button>
+                      <button class=" btn btn-link" (click)="deleteProd(prod.key,_paramSuppCode)" type="button" placement="left" ngbTooltip="Eliminar Proveedor"
+                        container="body">
+                        <i class=" tim-icons icon-trash-simple"> </i>
+                      </button>
+                    </td>
+                  </tr>
+                 
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

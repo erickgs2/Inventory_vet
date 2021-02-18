@@ -13,11 +13,14 @@ import { TablesComponent } from "../../pages/tables/tables.component";
 import { TypographyComponent } from "../../pages/typography/typography.component";
 import { SuppliersComponent } from '../../pages/suppliers/suppliers.component';
 import { CreateSupplierComponent } from '../../pages/create-supplier/create-supplier.component';
+import { InventoryComponent } from '../../pages/inventory/inventory.component';
+import { ProductsComponent } from '../../pages/products/products.component';
 // import { RtlComponent } from "../../pages/rtl/rtl.component";
 import { AngularFireModule} from '@angular/fire'
 import { AngularFirestoreModule} from '@angular/fire/firestore'
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { environment } from "src/environments/environment";
+import { InventoryDetailComponent } from "src/app/pages/inventory-detail/inventory-detail.component";
 
 @NgModule({
   imports: [
@@ -37,7 +40,10 @@ import { environment } from "src/environments/environment";
     TypographyComponent,
     NotificationsComponent,
     SuppliersComponent, 
-    CreateSupplierComponent
+    CreateSupplierComponent,
+    InventoryComponent, 
+    InventoryDetailComponent,
+    ProductsComponent
     // RtlComponent
   ]
 })
